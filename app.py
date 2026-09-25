@@ -104,7 +104,7 @@ CSS = """
   --nl-ok:#147A3A; --nl-ok-soft:#E6F6EC; --nl-warn:#B45309; --nl-warn-soft:#FEF3E2;
   --nl-end:#C0392B; --nl-end-soft:#FDECE8;
 }
-.block-container{padding-top:2.2rem; padding-bottom:3rem; max-width:760px}
+.block-container{padding-top:4.5rem; padding-bottom:3rem; max-width:760px}
 
 /* merek di halaman awal */
 .nl-brand{display:flex; align-items:center; gap:14px; margin-bottom:.4rem}
