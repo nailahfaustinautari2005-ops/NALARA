@@ -1,0 +1,17 @@
+# File sementara Python (dibuat otomatis, tidak perlu diunggah)
+__pycache__/
+*.pyc
+
+# Lingkungan virtual
+.venv/
+venv/
+
+# File pengaturan pribadi editor / sistem operasi
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Rahasia Streamlit (jangan pernah diunggah)
+.streamlit/secrets.toml
