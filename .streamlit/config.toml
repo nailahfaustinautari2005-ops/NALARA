@@ -1,0 +1,21 @@
+# Tema warna NALARA — palet "Biru Langit" (dipilih tim).
+# Untuk mengganti warna aplikasi, cukup ubah nilai di bawah ini
+# (warna Lara ada di file gambar folder assets/ dan di bagian WARNA pada app.py).
+
+[theme]
+base = "light"
+primaryColor = "#2F6FC9"              # tombol utama, progress bar, tautan
+backgroundColor = "#F5F9FF"           # latar halaman
+secondaryBackgroundColor = "#E1ECFB"  # latar expander dan kotak
+textColor = "#1B2433"                 # teks utama
+borderColor = "#DCE6F4"
+linkColor = "#265EB0"
+baseRadius = "10px"
+buttonRadius = "10px"
+showWidgetBorder = true
+
+[client]
+toolbarMode = "minimal"               # sembunyikan menu pengembang Streamlit
+
+[browser]
+gatherUsageStats = false
