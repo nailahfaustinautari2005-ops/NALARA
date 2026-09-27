@@ -120,7 +120,7 @@ Saat pertama kali dijalankan, Streamlit mungkin meminta email. Biarkan kosong, l
 python chatbot_cli.py
 ```
 
-**Tes otomatis** (81 tes; 1 tes panjang dilewati secara bawaan):
+**Tes otomatis** (84 tes; 1 tes panjang dilewati secara bawaan):
 ```bash
 python -m unittest -v
 ```
