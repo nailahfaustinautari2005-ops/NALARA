@@ -20,6 +20,7 @@ Untuk menjalankannya (Windows PowerShell):
 """
 
 import ast
+import copy
 import logging
 import os
 import re
@@ -354,6 +355,91 @@ class TestWebMatchesQuestionFlow(unittest.TestCase):
             explore(complaint, [])
         self.assertEqual(path_count, 460)
         self.assertEqual(seen_rules, {rule["id"] for rule in RULES})
+
+
+# ============================================================
+# 5. Kalimat Lara tidak pernah menjanjikan "satu hal lagi" secara keliru
+# ============================================================
+LAST_BUBBLES = {"Hmm, aku perlu tahu satu hal lagi…", "Aku hanya perlu tahu satu hal, ya."}
+
+
+def all_session_paths():
+    """Semua jalur jawaban (tanpa tampilan) sebagai daftar (keluhan, [indeks jawaban])."""
+    paths = []
+
+    def explore(complaint, prefix):
+        session = Session()
+        session.choose_complaint(complaint)
+        step = 0
+        while True:
+            action = session.next_action()
+            if action["type"] == "finished":
+                paths.append((complaint, prefix))
+                return
+            if action["type"] == "question":
+                if step == len(prefix):
+                    for index in range(len(action["question"]["options"])):
+                        explore(complaint, prefix + [index])
+                    return
+                session.answer(action["question"]["id"], prefix[step])
+                step += 1
+
+    for complaint in [c["fact"] for c in COMPLAINTS]:
+        explore(complaint, [])
+    return paths
+
+
+class TestLaraBubble(unittest.TestCase):
+    def test_last_question_claim_is_always_true(self):
+        """Di SEMUA 460 jalur: jika Lara bilang 'satu hal lagi', sesudahnya tidak ada pertanyaan lagi
+        (sebelum saran muncul); jika sesudahnya masih ada pertanyaan, Lara tidak boleh bilang begitu."""
+        paths = all_session_paths()
+        self.assertEqual(len(paths), 460)
+        claims = 0
+        for complaint, answers in paths:
+            session = Session()
+            session.choose_complaint(complaint)
+            remaining = list(answers)
+            while True:
+                action = session.next_action()
+                if action["type"] == "finished":
+                    break
+                if action["type"] != "question":
+                    continue
+                question = action["question"]
+                bubble = app.lara_question_bubble(session, question)
+                session.answer(question["id"], remaining.pop(0))
+                if question["is_stage"]:
+                    continue
+                # lihat langkah berikutnya pada salinan agar alur asli tidak berubah
+                peek = copy.deepcopy(session).next_action()
+                if bubble in LAST_BUBBLES:
+                    claims += 1
+                    self.assertNotEqual(peek["type"], "question", (complaint, answers, question["id"]))
+        self.assertGreater(claims, 0)
+
+    def test_check_does_not_change_session(self):
+        session = Session()
+        session.choose_complaint("laptop_slow")
+        question = session.next_action()["question"]
+        before = (list(session.asked), dict(session.answers), list(session.shown_rule_ids),
+                  set(session.user_facts))
+        app.is_last_question(session, question)
+        after = (list(session.asked), dict(session.answers), list(session.shown_rule_ids),
+                 set(session.user_facts))
+        self.assertEqual(before, after)
+
+    def test_bubbles_in_app(self):
+        # laptop lambat: pertanyaan 1 dan 2 masih berlanjut, pertanyaan terakhir sebelum saran = "satu hal lagi"
+        at = new_app()
+        at.button(key="complaint_laptop_slow").click().run()
+        self.assertTrue(any("Yuk, kita mulai dari pertanyaan pertama." in t for t in markdown_text(at)))
+        at.button(key="ans_q_laptop_hot_0").click().run()
+        self.assertTrue(any("Oke, lanjut ke pertanyaan berikutnya, ya." in t for t in markdown_text(at)))
+        # tidak menyala: satu-satunya pertanyaan sebelum saran
+        at = new_app()
+        at.button(key="complaint_no_power").click().run()
+        self.assertTrue(any("Aku hanya perlu tahu satu hal, ya." in t for t in markdown_text(at)))
 
 
 class _Branch(Exception):

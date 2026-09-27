@@ -27,6 +27,7 @@ Alur layar (sesuai mockup desain):
 """
 
 import base64
+import copy
 import html
 from datetime import datetime
 from pathlib import Path
@@ -330,6 +331,37 @@ def history_block(session):
     html_block(f'<div class="nl-history" aria-label="Jawaban sebelumnya">{rows}</div>')
 
 
+def is_last_question(session, question):
+    """
+    True jika pertanyaan ini PASTI yang terakhir sebelum saran muncul,
+    apa pun jawaban pengguna. Dicek dengan mencoba setiap pilihan jawaban
+    pada SALINAN sesi (sesi asli tidak berubah). Hanya dipakai untuk
+    memilih kalimat Lara, tidak memengaruhi penalaran.
+    """
+    if question["is_stage"]:
+        return False
+    for index in range(len(question["options"])):
+        trial = copy.deepcopy(session)
+        trial.answer(question["id"], index)
+        if trial.next_action()["type"] == "question":
+            return False
+    return True
+
+
+def lara_question_bubble(session, question):
+    """Kalimat Lara di atas pertanyaan. Tidak pernah menjanjikan jumlah yang salah."""
+    if question["is_stage"]:
+        return "Bagaimana hasilnya setelah dicoba?"
+    last = is_last_question(session, question)
+    if last and question["number"] == 1:
+        return "Aku hanya perlu tahu satu hal, ya."
+    if last:
+        return "Hmm, aku perlu tahu satu hal lagi…"
+    if question["number"] == 1:
+        return "Yuk, kita mulai dari pertanyaan pertama."
+    return "Oke, lanjut ke pertanyaan berikutnya, ya."
+
+
 def screen_question(session, question):
     topic_chip(session)
     number = question["number"]
@@ -337,14 +369,8 @@ def screen_question(session, question):
                f'<span>biasanya 2–{TYPICAL_MAX_QUESTIONS} pertanyaan</span></div>')
     st.progress(min(number / TYPICAL_MAX_QUESTIONS, 1.0))
 
-    if question["is_stage"]:
-        bubble = "Bagaimana hasilnya setelah dicoba?"
-    elif number == 1:
-        bubble = "Yuk, kita mulai dari pertanyaan pertama."
-    else:
-        bubble = "Oke, lanjut ke pertanyaan berikutnya, ya."
     html_block(f'<div class="nl-lara-row">{lara_img("berpikir", "Lara sedang berpikir")}'
-               f'<div class="nl-bubble">{esc(bubble)}</div></div>')
+               f'<div class="nl-bubble">{esc(lara_question_bubble(session, question))}</div></div>')
 
     if question["note"]:
         st.info(question["note"], icon=":material/lightbulb:")
