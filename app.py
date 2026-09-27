@@ -340,9 +340,9 @@ def screen_question(session, question):
     if question["is_stage"]:
         bubble = "Bagaimana hasilnya setelah dicoba?"
     elif number == 1:
-        bubble = "Aku mulai dengan satu pertanyaan, ya."
+        bubble = "Yuk, kita mulai dari pertanyaan pertama."
     else:
-        bubble = "Hmm, aku perlu tahu satu hal lagi…"
+        bubble = "Oke, lanjut ke pertanyaan berikutnya, ya."
     html_block(f'<div class="nl-lara-row">{lara_img("berpikir", "Lara sedang berpikir")}'
                f'<div class="nl-bubble">{esc(bubble)}</div></div>')
 
