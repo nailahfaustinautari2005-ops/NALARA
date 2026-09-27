@@ -6,7 +6,7 @@
 
 Sistem ini dibangun sebagai **Knowledge-Based System** dengan **31 rule** yang disusun dari dokumentasi resmi Microsoft, ASUS, HP, dan Lenovo, dan menggunakan inferensi **forward chaining**.
 
-> **Coba langsung (tanpa instalasi):** **[https://GANTI-DENGAN-LINK.streamlit.app](https://GANTI-DENGAN-LINK.streamlit.app)**
+> **Coba langsung (tanpa instalasi):** **[https://nalara.streamlit.app](https://nalara.streamlit.app)**
 > Bisa dibuka dari laptop, tablet, maupun HP.
 
 > **Catatan:** NALARA membantu menelusuri kemungkinan penyebab masalah, tetapi hasilnya bukan kepastian kerusakan. Untuk pemeriksaan lebih lanjut, silakan bawa laptop ke service center resmi.
