@@ -1,4 +1,4 @@
-# NALARA — Troubleshooting Laptop Berbasis Knowledge-Based System
+# NALARA — Troubleshooting Laptop Berbasis Knowledge-Based System dengan Forward Chaining
 
 <img src="assets/lara_menyapa.png" alt="Lara, maskot NALARA" width="120" align="right">
 
