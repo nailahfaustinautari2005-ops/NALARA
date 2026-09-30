@@ -192,10 +192,10 @@ Rule disusun dari dokumentasi troubleshooting resmi berikut. Kode sumber (S1–S
 
 ## Tim
 
-| Nama | NIM | Peran |
+| Nama | NIM 
 |---|---|---|
-| _(isi)_ | _(isi)_ | _(isi)_ |
-| _(isi)_ | _(isi)_ | _(isi)_ |
-| _(isi)_ | _(isi)_ | _(isi)_ |
+|Isti Salsabila|23/513697/TK/56437|
+|Deona Gracia Putri|23/515499/TK/56677|
+|Nai’lah Faustina Utari|23/515901/TK/56751|
 
 Maskot **Lara** adalah karakter orisinal yang dibuat untuk proyek ini.
